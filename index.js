@@ -24,6 +24,7 @@ app.set("port", process.env.PORT || 4000);
 
 //routes for express
 app.get("/api/trip", gmapsController.get)
+// app.get("/api/trip/tunes", spotifyController.get)
 
 
 app.listen(app.get("port"), function(){
