@@ -35,8 +35,6 @@ var gmapsController = {
         var origin = result["routes"][0]["legs"][0]["start_address"]
         res.json(result + '+++' + distance_text + '+++' + distance_value + '+++' + duration_text + '+++' + duration_value + '+++' + origin + '+++' + destination)
       })
-
-
     })
 
     request.on('error', function(e){
