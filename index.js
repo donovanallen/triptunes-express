@@ -29,16 +29,16 @@ app.set("port", process.env.PORT || 4000);
 // app.get("/api/trip/tunes", spotifyController.get)
 
 app.post("/api/trip", function(req, res) {
-  let origin = req.body.origin
-  let destination = req.body.destination
+  let userOrigin = req.body.origin
+  let userDestination = req.body.destination
   let gmaps_api_key = 'AIzaSyDUfo2Qpzsz-Q6uqYQjdNvRg5HBbj5Hwn8'
 
-  console.log("****** " + origin + " to " + destination + " --" + gmaps_api_key + "-- ");
+  console.log("****** " + userOrigin + " to " + userDestination + " -" + gmaps_api_key + "- ");
 
 
   var options = {
     host : 'maps.googleapis.com',
-    path : '/maps/api/directions/json?origin=' + origin + '&destination=' + destination + '&key=' + gmaps_api_key
+    path : '/maps/api/directions/json?origin=' + userOrigin + '&destination=' + userDestination + '&key=' + gmaps_api_key
   }
 
 
@@ -48,26 +48,50 @@ app.post("/api/trip", function(req, res) {
 
       response.on('data', function(data){
         body += data;
+
+        // var result = (JSON.parse(body).routes[0].legs[0]);
+        //
+        // var tripdetails = {
+        //   distance_text: result["distance"]["text"],
+        //   distance_value: result["distance"]["value"],
+        //   duration_text: result["duration"]["text"],
+        //   duration_value: result["duration"]["value"],
+        //   destination: result["end_address"],
+        //   origin: result["start_address"]
+        // }
+        //
+        // // res.json(result + '+++' + distance_text + '+++' + distance_value + '+++' + duration_text + '+++' + duration_value + '+++' + origin + '+++' + destination)
+        // console.log("**** " + tripdetails + tripdetails.origin + ", " + tripdetails.destination + ", " + tripdetails.distance_text + " ******");
+        // console.log(options.path);
+        // // res.json(tripdetails)
       });
 
       response.on('end', function() {
-        var result = (JSON.parse(body));
+        var result = (JSON.parse(body).routes[0].legs[0]);
 
-        var distance_text = result["routes"][0]["legs"][0]["distance"]["text"]
-        var distance_value = result["routes"][0]["legs"][0]["distance"]["value"]
-        var duration_text = result["routes"][0]["legs"][0]["duration"]["text"]
-        var duration_value = result["routes"][0]["legs"][0]["duration"]["value"]
-        var destination = result["routes"][0]["legs"][0]["end_address"]
-        var origin = result["routes"][0]["legs"][0]["start_address"]
-        res.json(result + '+++' + distance_text + '+++' + distance_value + '+++' + duration_text + '+++' + duration_value + '+++' + origin + '+++' + destination)
+        var tripdetails = {
+          distance_text: result["distance"]["text"],
+          distance_value: result["distance"]["value"],
+          duration_text: result["duration"]["text"],
+          duration_value: result["duration"]["value"],
+          destination: result["end_address"],
+          origin: result["start_address"]
+        }
+
+        // res.json(result + '+++' + distance_text + '+++' + distance_value + '+++' + duration_text + '+++' + duration_value + '+++' + origin + '+++' + destination)
+        console.log("**** " + tripdetails + tripdetails.origin + ", " + tripdetails.destination + ", " + tripdetails.distance_text + " ******");
+        console.log(options.path);
+        res.json(tripdetails)
       });
-
-
   })
 
   request.on('error', function(e){
     console.log('Problem with request: ' + e.message);
   })
+})
+
+app.get("/api/trip", function(req, res) {
+  // res.json(tripdetails)
 })
 
 app.listen(app.get("port"), function(){
