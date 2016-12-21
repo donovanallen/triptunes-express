@@ -74,11 +74,15 @@ app.post("/api/trip", function(req, res) {
 })
 
 app.post("/api/trip/tunes", function(req, res) {
+
+  let query = req.body.destination
+
   var options = {
     host : 'api.spotify.com',
-    path : '/v1/search?q=boston&type=playlist'
+    path : '/v1/search?q=' + query + '&type=playlist'
   }
 
+  console.log("****** " + query + " ******* " + options);
 
   var request = https.get(options,
     function(response){
