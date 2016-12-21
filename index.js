@@ -48,22 +48,6 @@ app.post("/api/trip", function(req, res) {
 
       response.on('data', function(data){
         body += data;
-
-        // var result = (JSON.parse(body).routes[0].legs[0]);
-        //
-        // var tripdetails = {
-        //   distance_text: result["distance"]["text"],
-        //   distance_value: result["distance"]["value"],
-        //   duration_text: result["duration"]["text"],
-        //   duration_value: result["duration"]["value"],
-        //   destination: result["end_address"],
-        //   origin: result["start_address"]
-        // }
-        //
-        // // res.json(result + '+++' + distance_text + '+++' + distance_value + '+++' + duration_text + '+++' + duration_value + '+++' + origin + '+++' + destination)
-        // console.log("**** " + tripdetails + tripdetails.origin + ", " + tripdetails.destination + ", " + tripdetails.distance_text + " ******");
-        // console.log(options.path);
-        // // res.json(tripdetails)
       });
 
       response.on('end', function() {
@@ -78,12 +62,42 @@ app.post("/api/trip", function(req, res) {
           origin: result["start_address"]
         }
 
-        // res.json(result + '+++' + distance_text + '+++' + distance_value + '+++' + duration_text + '+++' + duration_value + '+++' + origin + '+++' + destination)
         console.log("**** " + tripdetails + tripdetails.origin + ", " + tripdetails.destination + ", " + tripdetails.distance_text + " ******");
         console.log(options.path);
         res.json(tripdetails)
-      });
+      })
+  });
+
+  request.on('error', function(e){
+    console.log('Problem with request: ' + e.message);
   })
+})
+
+app.post("/api/trip/tunes", function(req, res) {
+  var options = {
+    host : 'api.spotify.com',
+    path : '/v1/search?q=boston&type=playlist'
+  }
+
+
+  var request = https.get(options,
+    function(response){
+      var spbody = ""
+
+      response.on('data', function(spdata){
+        spbody += spdata;
+      });
+
+      response.on('end', function() {
+        var spresult = (JSON.parse(spbody).playlists.items);
+
+        for (var i = 0; i < spresult.length; i++) {
+          console.log(spresult[i])
+        }
+
+        res.json(spresult)
+      })
+  });
 
   request.on('error', function(e){
     console.log('Problem with request: ' + e.message);
