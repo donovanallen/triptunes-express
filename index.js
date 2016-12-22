@@ -33,7 +33,7 @@ app.post("/api/trip", function(req, res) {
   let userDestination = req.body.destination
   let gmaps_api_key = 'AIzaSyDUfo2Qpzsz-Q6uqYQjdNvRg5HBbj5Hwn8'
 
-  console.log("****** " + userOrigin + " to " + userDestination + " -" + gmaps_api_key + "- ");
+  // console.log("****** " + userOrigin + " to " + userDestination + " -" + gmaps_api_key + "- ");
 
 
   var options = {
@@ -62,8 +62,8 @@ app.post("/api/trip", function(req, res) {
           origin: result["start_address"]
         }
 
-        console.log("**** " + tripdetails + tripdetails.origin + ", " + tripdetails.destination + ", " + tripdetails.distance_text + " ******");
-        console.log(options.path);
+        // console.log("**** " + tripdetails + tripdetails.origin + ", " + tripdetails.destination + ", " + tripdetails.distance_text + " ******");
+        // console.log(options.path);
         res.json(tripdetails)
       })
   });
@@ -82,7 +82,7 @@ app.post("/api/trip/tunes", function(req, res) {
     path : '/v1/search?q=' + query + '&type=playlist'
   }
 
-  console.log("****** " + query + " ******* " + options);
+  // console.log("****** " + query + " ******* " + options);
 
   var request = https.get(options,
     function(response){
@@ -95,10 +95,10 @@ app.post("/api/trip/tunes", function(req, res) {
       response.on('end', function() {
         var spresult = (JSON.parse(spbody).playlists.items);
 
-        for (var i = 0; i < spresult.length; i++) {
-          console.log(spresult[i])
-        }
-
+        // for (var i = 0; i < spresult.length; i++) {
+        //   console.log(spresult[i])
+        // }
+        // console.log(spresult);
         res.json(spresult)
       })
   });
@@ -109,8 +109,13 @@ app.post("/api/trip/tunes", function(req, res) {
 })
 
 app.get("/api/trip", function(req, res) {
-  // res.json(tripdetails)
+  res.json({test: "test routes: /api/trip"})
 })
+
+app.get("/api/trip/tunes", function(req, res) {
+  res.json({test: "test routes: /api/trip/tunes"})
+})
+
 
 app.listen(app.get("port"), function(){
   console.log("It's aliiive!");
