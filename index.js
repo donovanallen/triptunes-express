@@ -73,6 +73,7 @@ app.post("/api/trip", function(req, res) {
   })
 })
 
+
 app.post("/api/trip/tunes", function(req, res) {
 
   let query = req.body.destination
@@ -98,7 +99,7 @@ app.post("/api/trip/tunes", function(req, res) {
         // for (var i = 0; i < spresult.length; i++) {
         //   console.log(spresult[i])
         // }
-        // console.log(spresult);
+        console.log(spresult);
         res.json(spresult)
       })
   });
